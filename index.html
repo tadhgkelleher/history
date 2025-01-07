@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World War 2 History Graph</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet">
+  <style>
+    #connections-graph-container {
+      position: relative;
+      background-color: #f4f4f4;
+      margin: 0 auto;
+      width: 100%;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #connections-graph {
+      height: 700px;
+      width: 100%;
+      border: 1px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .toggle-physics-button {
+      background-color: #4a90e2;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      font-size: 18px;
+      margin: 0 auto;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 10px;
+      z-index: 9999;
+      transition: background-color 0.3s ease;
+    }
+
+    .toggle-physics-button:hover {
+      background-color: #357abd;
+    }
+
+    .toggle-physics-button:active {
+      transform: translateY(1px);
+    }
+  </style>
+</head>
+<body>
+
+<div id="connections-graph-container">
+  <button class="toggle-physics-button">Toggle Physics</button>
+  <div id="connections-graph"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const items = [
+      { id: 1, title: "United States", type: "Country", tags: ["Allied", "Country"] },
+      { id: 2, title: "United Kingdom", type: "Country", tags: ["Allied", "Country"] },
+      { id: 3, title: "Soviet Union", type: "Country", tags: ["Allied", "Country"] },
+      { id: 4, title: "Germany", type: "Country", tags: ["Axis", "Country"] },
+      { id: 5, title: "Italy", type: "Country", tags: ["Axis", "Country"] },
+      { id: 6, title: "Japan", type: "Country", tags: ["Axis", "Country"] },
+      { id: 7, title: "Normandy Invasion", type: "Event", tags: ["D-Day", "Event"] },
+      { id: 8, title: "Battle of Stalingrad", type: "Battle", tags: ["Eastern Front", "Battle"] },
+      { id: 9, title: "Pearl Harbor", type: "Event", tags: ["Attack", "Event"] },
+      { id: 10, title: "Adolf Hitler", type: "Leader", tags: ["Axis", "Leader"] },
+      { id: 11, title: "Winston Churchill", type: "Leader", tags: ["Allied", "Leader"] },
+      { id: 12, title: "Franklin D. Roosevelt", type: "Leader", tags: ["Allied", "Leader"] },
+      { id: 13, title: "Battle of Midway", type: "Battle", tags: ["Pacific", "Battle"] },
+      { id: 14, title: "Nuremberg Trials", type: "Event", tags: ["Post-War", "Event"] }
+    ];
+
+    const nodes = new vis.DataSet([]);
+    const edges = new vis.DataSet([]);
+    const nodeConnections = {};
+
+    const groups = {
+      Allied: {
+        color: { background: '#4a90e2', border: '#357abd' }
+      },
+      Axis: {
+        color: { background: '#e24a4a', border: '#bd3535' }
+      },
+      Event: {
+        color: { background: '#d8d8d8', border: '#aaa' }
+      },
+      Battle: {
+        color: { background: '#6c8e24', border: '#5a7b1e' }
+      },
+      Leader: {
+        color: { background: '#777777', border: '#555555' }
+      }
+    };
+
+    items.forEach(item => {
+      const itemNode = {
+        id: item.id,
+        label: item.title,
+        title: `<h3>${item.title}</h3><ul>${item.tags.map(tag => `<li>${tag}</li>`).join('')}</ul>`,
+        group: item.tags[0], // First tag is used to define the group (e.g., Allied, Axis)
+        size: item.tags.length * 2,
+        font: { color: '#ffffff' }
+      };
+      nodes.add(itemNode);
+
+      item.tags.forEach(tag => {
+        const tagNode = nodes.get(tag);
+        if (!tagNode) {
+          nodes.add({ 
+            id: tag, 
+            label: tag, 
+            group: "Event", // Default for undefined tags
+            font: { color: '#ffffff' }
+          });
+        }
+        edges.add({ 
+          from: item.id, 
+          to: tag,
+          color: { color: '#666666', highlight: '#999999' }
+        });
+
+        nodeConnections[tag] = (nodeConnections[tag] || 0) + 1;
+        nodeConnections[item.id] = (nodeConnections[item.id] || 0) + 1;
+      });
+    });
+
+    nodes.forEach(node => {
+      const connectionCount = nodeConnections[node.id] || 0;
+      node.size = Math.max(8, connectionCount * 2);
+      nodes.update(node);
+    });
+
+    const container = document.getElementById("connections-graph");
+    const data = { nodes: nodes, edges: edges };
+
+    const options = {
+      nodes: {
+        shape: 'dot',
+        font: { size: 14 },
+        scaling: {
+          min: 8,
+          max: 12
+        }
+      },
+      edges: {
+        width: 1,
+        smooth: {
+          type: 'continuous'
+        }
+      },
+      physics: {
+        enabled: false,
+        solver: 'forceAtlas2Based',
+        forceAtlas2Based: {
+          gravitationalConstant: -50,
+          centralGravity: 0.01,
+          springLength: 100,
+          springConstant: 0.08
+        },
+        stabilization: {
+          iterations: 100
+        }
+      },
+      interaction: {
+        hover: true,
+        zoomView: true,
+        dragView: true,
+        dragNodes: true,
+        zoomSpeed: 0.5,
+        tooltipDelay: 300
+      },
+      groups: groups,
+      layout: {
+        randomSeed: 2,
+        improvedLayout: true
+      }
+    };
+
+    const network = new vis.Network(container, data, options);
+
+    function applyCircularLayout() {
+      const positions = {};
+      const nodeCount = nodes.length;
+      const radius = 300;
+      const angle = (2 * Math.PI) / nodeCount;
+      
+      let i = 0;
+      nodes.forEach((node) => {
+        positions[node.id] = {
+          x: radius * Math.cos(angle * i),
+          y: radius * Math.sin(angle * i)
+        };
+        i++;
+      });
+      
+      network.setOptions({ physics: { enabled: false } });
+      network.moveTo({ scale: 0.3 });
+      network.body.data.nodes.update(
+        nodes.map(node => ({
+          id: node.id,
+          x: positions[node.id].x,
+          y: positions[node.id].y
+        }))
+      );
+    }
+
+    network.moveTo({
+      position: { x: 0, y: 0 },
+      scale: 0.3,
+      animation: {
+        duration: 1000,
+        easingFunction: 'easeInOutQuad'
+      }
+    });
+
+    // Initial layout
+    applyCircularLayout();
+
+    const toggleButton = document.querySelector(".toggle-physics-button");
+    let isPhysicsEnabled = false;
+
+    toggleButton.addEventListener("click", function() {
+      isPhysicsEnabled = !isPhysicsEnabled;
+      if (isPhysicsEnabled) {
+        network.setOptions({ physics: { enabled: true } });
+      } else {
+        applyCircularLayout();
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
