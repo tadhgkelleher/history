@@ -87,7 +87,17 @@
       { id: 17, title: "Dwight D. Eisenhower", type: "Leader", tags: ["Allied", "Leader"] },
       { id: 18, title: "Erwin Rommel", type: "Leader", tags: ["Axis", "Leader"] },
       { id: 19, title: "Hiroshima", type: "Event", tags: ["Attack", "Event"] },
-      { id: 20, title: "Nagasaki", type: "Event", tags: ["Attack", "Event"] }
+      { id: 20, title: "Nagasaki", type: "Event", tags: ["Attack", "Event"] },
+      { id: 21, title: "Battle of Britain", type: "Battle", tags: ["Western Front", "Battle"] },
+      { id: 22, title: "Vladimir Putin", type: "Leader", tags: ["Soviet Union", "Leader"] },
+      { id: 23, title: "Franklin D. Roosevelt's Four Freedoms", type: "Event", tags: ["Speech", "Event"] },
+      { id: 24, title: "Wojciech Jaruzelski", type: "Leader", tags: ["Soviet Union", "Leader"] },
+      { id: 25, title: "Pearl Harbor Attack", type: "Event", tags: ["Pacific", "Event"] },
+      { id: 26, title: "Victory in Europe", type: "Event", tags: ["End of War", "Event"] },
+      { id: 27, title: "Tehran Conference", type: "Event", tags: ["Meeting", "Event"] },
+      { id: 28, title: "The Blitz", type: "Event", tags: ["Attack", "Event"] },
+      { id: 29, title: "Operation Overlord", type: "Event", tags: ["D-Day", "Event"] },
+      { id: 30, title: "War in the Pacific", type: "Event", tags: ["Pacific", "Event"] }
     ];
 
     const nodes = new vis.DataSet([]);
@@ -118,7 +128,7 @@
         label: item.title,
         title: `<h3>${item.title}</h3><ul>${item.tags.map(tag => `<li>${tag}</li>`).join('')}</ul>`,
         group: item.tags[0], // First tag is used to define the group (e.g., Allied, Axis)
-        size: item.tags.length * 2,
+        size: item.tags.length * 6, // Increased node size for larger visibility
         font: { color: '#ffffff' }
       };
       nodes.add(itemNode);
@@ -146,7 +156,7 @@
 
     nodes.forEach(node => {
       const connectionCount = nodeConnections[node.id] || 0;
-      node.size = Math.max(8, connectionCount * 2);
+      node.size = Math.max(10, connectionCount * 3); // Increased size factor
       nodes.update(node);
     });
 
@@ -158,8 +168,8 @@
         shape: 'dot',
         font: { size: 14 },
         scaling: {
-          min: 8,
-          max: 12
+          min: 10,
+          max: 25 // Max size for larger nodes
         }
       },
       edges: {
@@ -201,7 +211,7 @@
     function applyCircularLayout() {
       const positions = {};
       const nodeCount = nodes.length;
-      const radius = 300;
+      const radius = 350;
       const angle = (2 * Math.PI) / nodeCount;
       
       let i = 0;
@@ -245,6 +255,7 @@
         network.setOptions({ physics: { enabled: true } });
       } else {
         applyCircularLayout();
+        network.setOptions({ physics: { enabled: false } });
       }
     });
   });
