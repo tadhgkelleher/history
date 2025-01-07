@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>World War 2 History Graph</title>
+  <title>Astronomy Library Graph</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet">
   <style>
     body {
-      background-color: #000000;
+      background-color: #0b0c10;
       color: #fff;
       font-family: 'Arial', sans-serif;
     }
 
     #connections-graph-container {
       position: relative;
-      background-color: #000000;
+      background-color: #0b0c10;
       margin: 0 auto;
       width: 100%;
       padding: 10px;
@@ -68,36 +68,23 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const items = [
-      { id: 1, title: "United States", type: "Country", tags: ["Allied", "Country"] },
-      { id: 2, title: "United Kingdom", type: "Country", tags: ["Allied", "Country"] },
-      { id: 3, title: "Soviet Union", type: "Country", tags: ["Allied", "Country"] },
-      { id: 4, title: "Germany", type: "Country", tags: ["Axis", "Country"] },
-      { id: 5, title: "Italy", type: "Country", tags: ["Axis", "Country"] },
-      { id: 6, title: "Japan", type: "Country", tags: ["Axis", "Country"] },
-      { id: 7, title: "Normandy Invasion", type: "Event", tags: ["D-Day", "Event"] },
-      { id: 8, title: "Battle of Stalingrad", type: "Battle", tags: ["Eastern Front", "Battle"] },
-      { id: 9, title: "Pearl Harbor", type: "Event", tags: ["Attack", "Event"] },
-      { id: 10, title: "Adolf Hitler", type: "Leader", tags: ["Axis", "Leader"] },
-      { id: 11, title: "Winston Churchill", type: "Leader", tags: ["Allied", "Leader"] },
-      { id: 12, title: "Franklin D. Roosevelt", type: "Leader", tags: ["Allied", "Leader"] },
-      { id: 13, title: "Battle of Midway", type: "Battle", tags: ["Pacific", "Battle"] },
-      { id: 14, title: "Nuremberg Trials", type: "Event", tags: ["Post-War", "Event"] },
-      { id: 15, title: "Battle of the Bulge", type: "Battle", tags: ["Western Front", "Battle"] },
-      { id: 16, title: "Operation Barbarossa", type: "Event", tags: ["Eastern Front", "Event"] },
-      { id: 17, title: "Dwight D. Eisenhower", type: "Leader", tags: ["Allied", "Leader"] },
-      { id: 18, title: "Erwin Rommel", type: "Leader", tags: ["Axis", "Leader"] },
-      { id: 19, title: "Hiroshima", type: "Event", tags: ["Attack", "Event"] },
-      { id: 20, title: "Nagasaki", type: "Event", tags: ["Attack", "Event"] },
-      { id: 21, title: "Battle of Britain", type: "Battle", tags: ["Western Front", "Battle"] },
-      { id: 22, title: "Vladimir Putin", type: "Leader", tags: ["Soviet Union", "Leader"] },
-      { id: 23, title: "Franklin D. Roosevelt's Four Freedoms", type: "Event", tags: ["Speech", "Event"] },
-      { id: 24, title: "Wojciech Jaruzelski", type: "Leader", tags: ["Soviet Union", "Leader"] },
-      { id: 25, title: "Pearl Harbor Attack", type: "Event", tags: ["Pacific", "Event"] },
-      { id: 26, title: "Victory in Europe", type: "Event", tags: ["End of War", "Event"] },
-      { id: 27, title: "Tehran Conference", type: "Event", tags: ["Meeting", "Event"] },
-      { id: 28, title: "The Blitz", type: "Event", tags: ["Attack", "Event"] },
-      { id: 29, title: "Operation Overlord", type: "Event", tags: ["D-Day", "Event"] },
-      { id: 30, title: "War in the Pacific", type: "Event", tags: ["Pacific", "Event"] }
+      { id: 1, title: "Galileo Galilei", type: "Author", tags: ["Physics", "Astronomy"] },
+      { id: 2, title: "Isaac Newton", type: "Author", tags: ["Physics", "Astronomy"] },
+      { id: 3, title: "Carl Sagan", type: "Author", tags: ["Astrophysics", "Astronomy"] },
+      { id: 4, title: "Cosmos", type: "Book", tags: ["Carl Sagan", "Astrophysics"] },
+      { id: 5, title: "Principia Mathematica", type: "Book", tags: ["Isaac Newton", "Physics"] },
+      { id: 6, title: "Starry Messenger", type: "Book", tags: ["Galileo Galilei", "Astronomy"] },
+      { id: 7, title: "The Big Bang Theory", type: "Subject", tags: ["Cosmology", "Physics"] },
+      { id: 8, title: "Dark Matter", type: "Subject", tags: ["Astrophysics", "Cosmology"] },
+      { id: 9, title: "Black Holes", type: "Subject", tags: ["Astrophysics", "Cosmology"] },
+      { id: 10, title: "Astrobiology", type: "Subject", tags: ["Astrobiology", "Astronomy"] },
+      { id: 11, title: "Stephen Hawking", type: "Author", tags: ["Physics", "Cosmology"] },
+      { id: 12, title: "A Brief History of Time", type: "Book", tags: ["Stephen Hawking", "Cosmology"] },
+      { id: 13, title: "Einstein's Theory of Relativity", type: "Subject", tags: ["Physics", "Cosmology"] },
+      { id: 14, title: "James Clerk Maxwell", type: "Author", tags: ["Physics", "Electromagnetism"] },
+      { id: 15, title: "The Structure of Scientific Revolutions", type: "Book", tags: ["Thomas Kuhn", "Philosophy of Science"] },
+      { id: 16, title: "The Sun", type: "Subject", tags: ["Astrophysics", "Solar System"] },
+      { id: 17, title: "Milky Way", type: "Subject", tags: ["Galaxies", "Astrophysics"] }
     ];
 
     const nodes = new vis.DataSet([]);
@@ -105,20 +92,14 @@
     const nodeConnections = {};
 
     const groups = {
-      Allied: {
-        color: { background: '#00FF00', border: '#008000' }
+      Author: {
+        color: { background: '#FF6347', border: '#FF4500' }
       },
-      Axis: {
-        color: { background: '#FF0000', border: '#B22222' }
+      Book: {
+        color: { background: '#FFD700', border: '#FF8C00' }
       },
-      Event: {
-        color: { background: '#FFFF00', border: '#FFD700' }
-      },
-      Battle: {
-        color: { background: '#00FFFF', border: '#40E0D0' }
-      },
-      Leader: {
-        color: { background: '#800080', border: '#4B0082' }
+      Subject: {
+        color: { background: '#00CED1', border: '#20B2AA' }
       }
     };
 
@@ -127,8 +108,8 @@
         id: item.id,
         label: item.title,
         title: `<h3>${item.title}</h3><ul>${item.tags.map(tag => `<li>${tag}</li>`).join('')}</ul>`,
-        group: item.tags[0], // First tag is used to define the group (e.g., Allied, Axis)
-        size: item.tags.length * 6, // Increased node size for larger visibility
+        group: item.type, // Group by type (Author, Book, Subject)
+        size: item.tags.length * 6, // Node size increases based on the number of tags
         font: { color: '#ffffff' }
       };
       nodes.add(itemNode);
@@ -139,7 +120,7 @@
           nodes.add({ 
             id: tag, 
             label: tag, 
-            group: "Event", // Default for undefined tags
+            group: "Subject", // Default group for undefined tags
             font: { color: '#ffffff' }
           });
         }
@@ -156,7 +137,7 @@
 
     nodes.forEach(node => {
       const connectionCount = nodeConnections[node.id] || 0;
-      node.size = Math.max(10, connectionCount * 3); // Increased size factor
+      node.size = Math.max(10, connectionCount * 3); // Increased size factor for larger nodes
       nodes.update(node);
     });
 
@@ -169,7 +150,7 @@
         font: { size: 14 },
         scaling: {
           min: 10,
-          max: 25 // Max size for larger nodes
+          max: 25
         }
       },
       edges: {
@@ -179,17 +160,7 @@
         }
       },
       physics: {
-        enabled: false,
-        solver: 'forceAtlas2Based',
-        forceAtlas2Based: {
-          gravitationalConstant: -50,
-          centralGravity: 0.01,
-          springLength: 100,
-          springConstant: 0.08
-        },
-        stabilization: {
-          iterations: 100
-        }
+        enabled: false, // Disable physics to maintain initial position
       },
       interaction: {
         hover: true,
@@ -202,16 +173,17 @@
       groups: groups,
       layout: {
         randomSeed: 2,
-        improvedLayout: true
+        improvedLayout: false,
+        circular: true // Start in circular layout
       }
     };
 
     const network = new vis.Network(container, data, options);
 
-    function applyCircularLayout() {
+    function applyExpansiveLayout() {
       const positions = {};
       const nodeCount = nodes.length;
-      const radius = 350;
+      const radius = 500;
       const angle = (2 * Math.PI) / nodeCount;
       
       let i = 0;
@@ -223,8 +195,8 @@
         i++;
       });
       
-      network.setOptions({ physics: { enabled: false } });
-      network.moveTo({ scale: 0.3 });
+      network.setOptions({ physics: { enabled: true } });
+      network.moveTo({ scale: 1.0 });
       network.body.data.nodes.update(
         nodes.map(node => ({
           id: node.id,
@@ -243,8 +215,8 @@
       }
     });
 
-    // Initial layout
-    applyCircularLayout();
+    // Initial circular layout
+    applyExpansiveLayout();
 
     const toggleButton = document.querySelector(".toggle-physics-button");
     let isPhysicsEnabled = false;
@@ -254,7 +226,7 @@
       if (isPhysicsEnabled) {
         network.setOptions({ physics: { enabled: true } });
       } else {
-        applyCircularLayout();
+        applyExpansiveLayout();
         network.setOptions({ physics: { enabled: false } });
       }
     });
