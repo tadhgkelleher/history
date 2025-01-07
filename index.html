@@ -6,9 +6,15 @@
   <title>World War 2 History Graph</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet">
   <style>
+    body {
+      background-color: #000000;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+    }
+
     #connections-graph-container {
       position: relative;
-      background-color: #f4f4f4;
+      background-color: #000000;
       margin: 0 auto;
       width: 100%;
       padding: 10px;
@@ -90,19 +96,19 @@
 
     const groups = {
       Allied: {
-        color: { background: '#2c3e50', border: '#34495e' }
+        color: { background: '#00FF00', border: '#008000' }
       },
       Axis: {
-        color: { background: '#e74c3c', border: '#c0392b' }
+        color: { background: '#FF0000', border: '#B22222' }
       },
       Event: {
-        color: { background: '#bdc3c7', border: '#95a5a6' }
+        color: { background: '#FFFF00', border: '#FFD700' }
       },
       Battle: {
-        color: { background: '#16a085', border: '#1abc9c' }
+        color: { background: '#00FFFF', border: '#40E0D0' }
       },
       Leader: {
-        color: { background: '#34495e', border: '#2c3e50' }
+        color: { background: '#800080', border: '#4B0082' }
       }
     };
 
