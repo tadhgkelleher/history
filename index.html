@@ -6,15 +6,9 @@
   <title>World War 2 History Graph</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet">
   <style>
-    body {
-      background-color: #000000;
-      color: #fff;
-      font-family: 'Arial', sans-serif;
-    }
-
     #connections-graph-container {
       position: relative;
-      background-color: #000000;
+      background-color: #f4f4f4;
       margin: 0 auto;
       width: 100%;
       padding: 10px;
@@ -60,7 +54,7 @@
 <body>
 
 <div id="connections-graph-container">
-  <button class="toggle-physics-button"Push Button</button>
+  <button class="toggle-physics-button">Toggle Physics</button>
   <div id="connections-graph"></div>
 </div>
 
@@ -87,17 +81,7 @@
       { id: 17, title: "Dwight D. Eisenhower", type: "Leader", tags: ["Allied", "Leader"] },
       { id: 18, title: "Erwin Rommel", type: "Leader", tags: ["Axis", "Leader"] },
       { id: 19, title: "Hiroshima", type: "Event", tags: ["Attack", "Event"] },
-      { id: 20, title: "Nagasaki", type: "Event", tags: ["Attack", "Event"] },
-      { id: 21, title: "Battle of Britain", type: "Battle", tags: ["Western Front", "Battle"] },
-      { id: 22, title: "Vladimir Putin", type: "Leader", tags: ["Soviet Union", "Leader"] },
-      { id: 23, title: "Franklin D. Roosevelt's Four Freedoms", type: "Event", tags: ["Speech", "Event"] },
-      { id: 24, title: "Wojciech Jaruzelski", type: "Leader", tags: ["Soviet Union", "Leader"] },
-      { id: 25, title: "Pearl Harbor Attack", type: "Event", tags: ["Pacific", "Event"] },
-      { id: 26, title: "Victory in Europe", type: "Event", tags: ["End of War", "Event"] },
-      { id: 27, title: "Tehran Conference", type: "Event", tags: ["Meeting", "Event"] },
-      { id: 28, title: "The Blitz", type: "Event", tags: ["Attack", "Event"] },
-      { id: 29, title: "Operation Overlord", type: "Event", tags: ["D-Day", "Event"] },
-      { id: 30, title: "War in the Pacific", type: "Event", tags: ["Pacific", "Event"] }
+      { id: 20, title: "Nagasaki", type: "Event", tags: ["Attack", "Event"] }
     ];
 
     const nodes = new vis.DataSet([]);
@@ -106,19 +90,19 @@
 
     const groups = {
       Allied: {
-        color: { background: '#00FF00', border: '#008000' }
+        color: { background: '#2c3e50', border: '#34495e' }
       },
       Axis: {
-        color: { background: '#FF0000', border: '#B22222' }
+        color: { background: '#e74c3c', border: '#c0392b' }
       },
       Event: {
-        color: { background: '#FFFF00', border: '#FFD700' }
+        color: { background: '#bdc3c7', border: '#95a5a6' }
       },
       Battle: {
-        color: { background: '#00FFFF', border: '#40E0D0' }
+        color: { background: '#16a085', border: '#1abc9c' }
       },
       Leader: {
-        color: { background: '#800080', border: '#4B0082' }
+        color: { background: '#34495e', border: '#2c3e50' }
       }
     };
 
@@ -128,7 +112,7 @@
         label: item.title,
         title: `<h3>${item.title}</h3><ul>${item.tags.map(tag => `<li>${tag}</li>`).join('')}</ul>`,
         group: item.tags[0], // First tag is used to define the group (e.g., Allied, Axis)
-        size: item.tags.length * 6, // Increased node size for larger visibility
+        size: item.tags.length * 2,
         font: { color: '#ffffff' }
       };
       nodes.add(itemNode);
@@ -156,7 +140,7 @@
 
     nodes.forEach(node => {
       const connectionCount = nodeConnections[node.id] || 0;
-      node.size = Math.max(10, connectionCount * 3); // Increased size factor
+      node.size = Math.max(8, connectionCount * 2);
       nodes.update(node);
     });
 
@@ -168,8 +152,8 @@
         shape: 'dot',
         font: { size: 14 },
         scaling: {
-          min: 10,
-          max: 25 // Max size for larger nodes
+          min: 8,
+          max: 12
         }
       },
       edges: {
@@ -211,7 +195,7 @@
     function applyCircularLayout() {
       const positions = {};
       const nodeCount = nodes.length;
-      const radius = 350;
+      const radius = 300;
       const angle = (2 * Math.PI) / nodeCount;
       
       let i = 0;
@@ -255,7 +239,6 @@
         network.setOptions({ physics: { enabled: true } });
       } else {
         applyCircularLayout();
-        network.setOptions({ physics: { enabled: false } });
       }
     });
   });
